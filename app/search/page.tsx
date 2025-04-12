@@ -287,8 +287,8 @@ export default function SearchOverlay() {
         </div>
       </div>
 
-      <p className="text-sm text-gray-400 mb-2 mx-2">Recent searches</p>
-      <ul className="mx-2">
+      <p className="text-sm text-gray-400 mb-2 mx-2 lg:text-center">Recent searches</p>
+      <ul className="mx-2 lg:w-1/2 lg:mx-auto">
         {history.map((item, idx) => (
           
           <a key={idx} onClick={() => router.push(`/results?query=${item}`)}>
