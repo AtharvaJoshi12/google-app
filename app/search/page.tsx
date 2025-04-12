@@ -106,7 +106,7 @@ export default function SearchOverlay() {
          // ✅ Redirect to results
          setTimeout(() => {
            handleCloseLensOverlay(); // optional: close modal
-           router.push("/results?image=1");
+           router.push("/image-results");
          }, 1000);
       };
       reader.readAsDataURL(file);
@@ -225,7 +225,7 @@ export default function SearchOverlay() {
                         // ✅ Redirect to results
                         setTimeout(() => {
                           handleCloseLensOverlay(); // optional: close modal
-                          router.push("/results?image=1");
+                          router.push("/image-results");
                         }, 300);
                       }
                     }
