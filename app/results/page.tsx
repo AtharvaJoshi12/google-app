@@ -2,11 +2,11 @@
 
 "use client";
 
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 export default function ResultsPage() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query");
+  // const searchParams = useSearchParams();
+  // const query = searchParams.get("query");
 
   const dummyResults = [
     {
@@ -32,13 +32,13 @@ export default function ResultsPage() {
   ];
 
   const filtered = dummyResults.filter((item) =>
-    item.title.toLowerCase().includes(query?.toLowerCase() || "")
+    item.title.toLowerCase().includes("")
   );
 
   return (
     <div className="min-h-screen bg-[#1f2125] text-white p-6 font-sans">
       <h1 className="text-2xl font-semibold mb-4">
-        Search Results for: <span className="text-purple-300">"{query}"</span>
+        Search Results for: <span className="text-purple-300">""</span>
       </h1>
 
       {filtered.length > 0 ? (
