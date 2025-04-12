@@ -2,6 +2,8 @@
 
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BsFillMicFill } from "react-icons/bs";
 import { FaBars, FaRegBell } from "react-icons/fa";
 import { GoHomeFill } from "react-icons/go";
@@ -12,11 +14,12 @@ import {
 } from "react-icons/md";
 import { SiGooglelens } from "react-icons/si";
 
-// import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function ResultsPage() {
-  // const searchParams = useSearchParams();
-  // const query = searchParams.get("query");
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
+  const router = useRouter();
 
   const dummyResults = [
     {
@@ -52,7 +55,6 @@ export default function ResultsPage() {
       tags: ["Code", "Repository", "DevOps"],
     },
   ];
-  
 
   const filtered = dummyResults.filter((item) =>
     item.title.toLowerCase().includes("")
@@ -82,15 +84,18 @@ export default function ResultsPage() {
           </div>
         </div>
         <div className="flex flex-col w-full items-center">
-          <div className="flex items-center w-full mb-4">
+          <div
+            onClick={() => router.push("/search")}
+            className="flex items-center w-full mb-4"
+          >
             {/* Search Bar */}
             <div className="bg-[#2f3133] w-full rounded-full flex flex-row items-center lg:w-[60%] mx-auto justify-between px-5 py-3 mt-5">
               <div className="flex flex-row justify-start items-center">
                 <p className="text-gray-400">
                   <IoMdSearch className="text-2xl" />
                 </p>
-                <div className="w-[80%] lg:w-[600px] text-lg ml-2 text-white outline-none bg-transparent">
-                  Search
+                <div className="w-[200px] lg:w-[600px] text-lg ml-2 text-white outline-none ">
+                {query ? `${query.slice(0, 20)}${query.length > 20 ? "..." : ""}` : "Image"}
                 </div>
               </div>
               <div className="flex flex-row justify-center items-center">
@@ -127,27 +132,28 @@ export default function ResultsPage() {
         {/* Top result */}
         <div className="mb-8">
           <div className="flex items-start flex-col">
-          {dummyResults.map((result, index) => (
-  <div key={index} className="border-b-2 pb-5 mt-5 border-gray-500">
-    <h2 className="text-xl text-white font-medium">{result.title}</h2>
-    <p className="text-white text-sm">{result.url}</p>
-    <h3 className="text-lg text-blue-400 font-medium mt-2">
-      {result.heading}
-    </h3>
-    <p className="text-gray-400 mt-1">{result.description}</p>
-    <div className="flex mt-2 text-sm text-blue-400 flex-wrap">
-      {result.tags.map((tag, idx) => (
-        <span
-          key={idx}
-          className="mr-4 mb-2 border-2 border-gray-600 px-3 py-2 rounded-full"
-        >
-          {tag}
-        </span>
-      ))}
-    </div>
-  </div>
-))}
-
+            {dummyResults.map((result, index) => (
+              <div key={index} className="border-b-2 pb-5 mt-5 border-gray-500">
+                <h2 className="text-xl text-white font-medium">
+                  {result.title}
+                </h2>
+                <p className="text-white text-sm">{result.url}</p>
+                <h3 className="text-lg text-blue-400 font-medium mt-2">
+                  {result.heading}
+                </h3>
+                <p className="text-gray-400 mt-1">{result.description}</p>
+                <div className="flex mt-2 text-sm text-blue-400 flex-wrap">
+                  {result.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="mr-4 mb-2 border-2 border-gray-600 px-3 py-2 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -167,12 +173,12 @@ export default function ResultsPage() {
 
       {/* Bottom Nav */}
       <div className="lg:hidden fixed bottom-0 left-0 w-full bg-[#2f3133] flex justify-around items-center py-5 text-xl border-t border-gray-700">
-        <span>
+        <Link href="/">
           <GoHomeFill className="text-gray-500 w-10 h-6" />
-        </span>
-        <span className=" bg-[#394357] px-2 py-1 rounded-full">
+        </Link>
+        <Link href="/search" className=" bg-[#394357] px-2 py-1 rounded-full">
           <IoMdSearch className="text-blue-500 w-10 h-6" />
-        </span>
+        </Link>
         <span>
           <FaRegBell className="text-gray-500 w-10 h-6" />
         </span>

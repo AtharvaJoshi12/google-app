@@ -103,6 +103,11 @@ export default function SearchOverlay() {
       const reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target?.result as string);
+         // ✅ Redirect to results
+         setTimeout(() => {
+           handleCloseLensOverlay(); // optional: close modal
+           router.push("/results?image=1");
+         }, 1000);
       };
       reader.readAsDataURL(file);
     }
@@ -254,7 +259,7 @@ export default function SearchOverlay() {
         </div>
       )}
 
-      <div className="flex items-center mb-4">
+      <div className="flex items-center m-2 mb-4">
         {/* Search Bar */}
         <div className="bg-[#2f3133] w-full rounded-full flex flex-row items-center lg:w-[60%] mx-auto justify-between px-5 py-3 mt-5">
           <div className="flex flex-row justify-start items-center">
@@ -286,7 +291,7 @@ export default function SearchOverlay() {
       <ul className="mx-2">
         {history.map((item, idx) => (
           
-          <a key={idx} href="/results">
+          <a key={idx} onClick={() => router.push(`/results?query=${item}`)}>
           <li
             key={idx}
             className="flex items-center py-2 text-lg text-gray-300 cursor-pointer"

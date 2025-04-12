@@ -164,14 +164,12 @@ export default function Home() {
 
         {/* Bottom Nav */}
         <div className="lg:hidden fixed bottom-0 left-0 w-full bg-[#2f3133] flex justify-around items-center py-5 text-xl border-t border-gray-700">
-          <Link href="/">
-          <span className=" bg-[#394357] px-2 py-1 rounded-full">
+          <Link href={"/"} className=" bg-[#394357] px-2 py-1 rounded-full">
             <GoHomeFill className="text-blue-500 w-10 h-6" />
-          </span>
           </Link>
-          <span>
+          <Link href={"/search"}>
             <IoMdSearch className="text-gray-500 w-10 h-6" />
-          </span>
+          </Link>
           <span>
             <FaRegBell className="text-gray-500 w-10 h-6" />
           </span>
