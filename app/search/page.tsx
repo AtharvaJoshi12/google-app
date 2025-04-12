@@ -285,6 +285,8 @@ export default function SearchOverlay() {
       <p className="text-sm text-gray-400 mb-2 mx-2">Recent searches</p>
       <ul className="mx-2">
         {history.map((item, idx) => (
+          
+          <a key={idx} href="/results">
           <li
             key={idx}
             className="flex items-center py-2 text-lg text-gray-300 cursor-pointer"
@@ -295,6 +297,7 @@ export default function SearchOverlay() {
             </span>{" "}
             {item}
           </li>
+            </a>
         ))}
       </ul>
     </div>
