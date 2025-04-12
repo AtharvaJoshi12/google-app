@@ -16,9 +16,11 @@ export default function SearchOverlay() {
   const [showImageOverlay, setShowImageOverlay] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [lensCameraStream, setLensCameraStream] = useState<MediaStream | null>(null);
+  const [lensCameraStream, setLensCameraStream] = useState<MediaStream | null>(
+    null
+  );
   const lensVideoRef = useRef<HTMLVideoElement>(null);
-  
+
   const [history] = useState([
     "sleeveless gilet jacket men india",
     "sequins skirt less than 2000",
@@ -77,7 +79,7 @@ export default function SearchOverlay() {
           height: { ideal: 720 },
         },
       });
-      
+
       if (lensVideoRef.current) {
         lensVideoRef.current.srcObject = stream;
       }
@@ -94,7 +96,6 @@ export default function SearchOverlay() {
       setLensCameraStream(null);
     }
   };
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -112,7 +113,7 @@ export default function SearchOverlay() {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#1f2125] text-white p-4 z-50 font-sans">
+    <div className="fixed inset-0 bg-[#1f2125] text-white z-50 font-sans">
       {/* Mic Overlay */}
       {showMicOverlay && (
         <div className="fixed inset-0 bg-[#1f2125] bg-opacity-80 flex flex-col items-center justify-center z-50">
@@ -147,60 +148,57 @@ export default function SearchOverlay() {
       )}
 
 {showImageOverlay && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center">
-          <p
-            onClick={handleCloseLensOverlay}
-            className="absolute top-4 left-4 p-[6px] bg-gray-700 rounded-full cursor-pointer"
-          >
-            <MdOutlineKeyboardArrowLeft className="text-4xl text-white" />
-          </p>
+  <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center">
+    <p
+      onClick={handleCloseLensOverlay}
+      className="absolute top-4 left-4 p-[6px] bg-gray-700 rounded-full cursor-pointer"
+    >
+      <MdOutlineKeyboardArrowLeft className="text-4xl text-white" />
+    </p>
 
-          <div className="flex flex-col items-center mt-12">
-            {!selectedImage ? (
-              <>
-                <Webcam
-                  audio={false}
-                  screenshotFormat="image/jpeg"
-                  width="300px"
-                  videoConstraints={{
-                    facingMode: "environment", // Back camera for mobile
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                  }}
-                />
-                <div className="flex gap-4">
-                  <button
-                    onClick={handleUploadClick}
-                    className="text-white bg-gray-700 px-4 py-2 rounded-full"
-                  >
-                    Upload from Gallery
-                  </button>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={inputFileRef}
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <img src={selectedImage} className="w-[300px] rounded-lg mb-4" />
-                <button
-                  onClick={() => {
-                    handleCloseLensOverlay(); // stop camera before redirecting
-                    router.push(`/results?image=1`);
-                  }}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-full"
-                >
-                  Search Image
-                </button>
-              </>
-            )}
+    <div className="flex flex-col items-center mt-12">
+      {!selectedImage ? (
+        <>
+          <video
+            ref={lensVideoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-[300px] h-[300px] rounded-lg mb-4 object-cover"
+          />
+          <div className="flex gap-4">
+            <button
+              onClick={handleUploadClick}
+              className="text-white bg-gray-700 px-4 py-2 rounded-full"
+            >
+              Upload from Gallery
+            </button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={inputFileRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
           </div>
-        </div>
+        </>
+      ) : (
+        <>
+          <img src={selectedImage} className="w-[300px] rounded-lg mb-4" />
+          <button
+            onClick={() => {
+              handleCloseLensOverlay(); // stop camera before redirecting
+              router.push(`/results?image=1`);
+            }}
+            className="bg-blue-600 text-white px-6 py-2 rounded-full"
+          >
+            Search Image
+          </button>
+        </>
       )}
+    </div>
+  </div>
+)}
 
       <div className="flex items-center mb-4">
         {/* Search Bar */}
@@ -223,7 +221,7 @@ export default function SearchOverlay() {
             <p className="mr-5 cursor-pointer" onClick={handleMicClick}>
               <BsFillMicFill className="text-xl" />
             </p>
-            <p className="mr-5 cursor-pointer" onClick={handleLensClick }>
+            <p className="mr-5 cursor-pointer" onClick={handleLensClick}>
               <SiGooglelens className="text-xl" />
             </p>
           </div>
