@@ -45,6 +45,7 @@ export default function SearchOverlay() {
         const transcript = event.results[0][0].transcript;
         setSearch(transcript);
         setShowMicOverlay(false);
+        router.push(`/results?query=${encodeURIComponent(transcript)}`);
       };
 
       recognition.onerror = (err: any) => {
@@ -105,7 +106,7 @@ export default function SearchOverlay() {
         setSelectedImage(e.target?.result as string);
          // ✅ Redirect to results
          setTimeout(() => {
-           handleCloseLensOverlay(); // optional: close modal
+           handleCloseLensOverlay(); 
            router.push("/image-results");
          }, 1000);
       };
