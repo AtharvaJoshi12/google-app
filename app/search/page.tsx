@@ -147,58 +147,112 @@ export default function SearchOverlay() {
         </div>
       )}
 
-{showImageOverlay && (
-  <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center">
-    <p
-      onClick={handleCloseLensOverlay}
-      className="absolute top-4 left-4 p-[6px] bg-gray-700 rounded-full cursor-pointer"
-    >
-      <MdOutlineKeyboardArrowLeft className="text-4xl text-white" />
-    </p>
-
-    <div className="flex flex-col items-center mt-12">
-      {!selectedImage ? (
-        <>
+      {showImageOverlay && (
+        <div className="fixed inset-0 bg-black z-50">
+          {/* Camera preview full screen */}
           <video
             ref={lensVideoRef}
             autoPlay
             playsInline
             muted
-            className="w-[300px] h-[300px] rounded-lg mb-4 object-cover"
+            className="w-full h-full object-cover absolute inset-0 z-0"
           />
-          <div className="flex gap-4">
-            <button
-              onClick={handleUploadClick}
-              className="text-white bg-gray-700 px-4 py-2 rounded-full"
-            >
-              Upload from Gallery
-            </button>
-            <input
-              type="file"
-              accept="image/*"
-              ref={inputFileRef}
-              onChange={handleFileChange}
-              className="hidden"
-            />
+
+          {/* Overlay content */}
+          <div className="absolute inset-0 z-10 flex flex-col justify-between">
+            {/* Top bar */}
+            <div className="flex justify-between items-center px-4 pt-4">
+              {/* Back button */}
+              <button
+                onClick={handleCloseLensOverlay}
+                className=" bg-opacity-60 p-2 rounded-full text-white"
+              >
+                <MdOutlineKeyboardArrowLeft className="text-4xl" />
+              </button>
+
+              <p className="text-2xl font-semibold mr-[30%]">Google Lens</p>
+            </div>
+
+            {/* Bottom capture/search button */}
+            {/* Upload button */}
+            <div className="absolute bottom-1 mb-10 left-10 ">
+              <button
+                onClick={handleUploadClick}
+                className="bg-white bg-opacity-60 text-white px-1 py-1 rounded-full text-sm"
+              >
+                <img
+                  src="/gallery.png"
+                  alt="Upload"
+                  className="w-16 h-16 rounded-full"
+                />
+              </button>
+              <input
+                type="file"
+                accept="image/*"
+                ref={inputFileRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
+            <div className="flex justify-center mb-10">
+              {!selectedImage ? (
+                <button
+                  onClick={() => {
+                    if (lensVideoRef.current) {
+                      const canvas = document.createElement("canvas");
+                      const video = lensVideoRef.current;
+                      canvas.width = video.videoWidth;
+                      canvas.height = video.videoHeight;
+                      const context = canvas.getContext("2d");
+
+                      if (context) {
+                        context.drawImage(video, 0, 0);
+                        const imageUrl = canvas.toDataURL("image/png");
+                        setSelectedImage(imageUrl);
+
+                        // 🔴 Stop the camera stream
+                        const stream = video.srcObject as MediaStream;
+                        if (stream) {
+                          stream.getTracks().forEach((track) => track.stop());
+                          video.srcObject = null;
+                        }
+
+                        // ✅ Redirect to results
+                        setTimeout(() => {
+                          handleCloseLensOverlay(); // optional: close modal
+                          router.push("/results?image=1");
+                        }, 300);
+                      }
+                    }
+                  }}
+                  className="bg-white text-gray-800 px-6 py-6 rounded-full font-semibold"
+                >
+                  <IoMdSearch className="w-10 h-10" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleCloseLensOverlay(); // Close camera
+                    router.push(`/results?image=1`);
+                  }}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold"
+                >
+                  Search Image
+                </button>
+              )}
+            </div>
           </div>
-        </>
-      ) : (
-        <>
-          <img src={selectedImage} className="w-[300px] rounded-lg mb-4" />
-          <button
-            onClick={() => {
-              handleCloseLensOverlay(); // stop camera before redirecting
-              router.push(`/results?image=1`);
-            }}
-            className="bg-blue-600 text-white px-6 py-2 rounded-full"
-          >
-            Search Image
-          </button>
-        </>
+
+          {/* Show captured image preview over camera if selected */}
+          {selectedImage && (
+            <img
+              src={selectedImage}
+              alt="Captured"
+              className="absolute inset-0 w-full h-full object-cover z-20"
+            />
+          )}
+        </div>
       )}
-    </div>
-  </div>
-)}
 
       <div className="flex items-center mb-4">
         {/* Search Bar */}
